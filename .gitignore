@@ -1,0 +1,23 @@
+*.gem
+Gemfile.lock
+
+## Documentation cache and generated files:
+/.yardoc/
+/_yardoc/
+/doc/
+/rdoc/
+fastlane/README.md
+fastlane/report.xml
+coverage
+test-results
+
+.DS_Store
+.env
+.claude/settings.local.json
+
+## Real Charles exports (e.g. charles.config, Breakpoints.xml, Include.xml)
+## contain machine-local state and secrets — only these two example files
+## are meant to be committed.
+example/*
+!example/charles.yml
+!example/.env.example

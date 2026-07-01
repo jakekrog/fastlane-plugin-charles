@@ -1,0 +1,62 @@
+# Simplified Charles Proxy configuration. The `charles` fastlane action
+# generates a full Charles `.config` XML file from this at runtime, so this
+# is the file your team commits and shares instead of Charles's own exported
+# XML (which bakes in machine-local UI state, your license key, etc).
+
+proxy:
+  # Enables Charles's SOCKS proxy listener in addition to its normal HTTP(S)
+  # proxy. This only opens an additional listening mode for non-HTTP-aware
+  # clients — it doesn't change behavior for normal HTTP(S) traffic, so it's
+  # safe to leave on. Defaults to true.
+  enable_socks: true
+
+  # Hosts whose SSL traffic should be decrypted (MITM'd) by Charles.
+  # Wildcards (`*`) are supported. Each entry can be a bare hostname
+  # (assumed to be on port 443), or, if a host runs SSL on a non-standard
+  # port, the expanded `host`/`port` form shown for "internal.example.com"
+  # below.
+  #
+  # This plain list form is shorthand for an include-only list (Charles's own
+  # default). If you need to exclude specific hosts from SSL decryption
+  # (Charles's "sslExcludeLocations"), use the expanded form instead:
+  #   ssl:
+  #     include:
+  #       - "*.example.com"
+  #     exclude:
+  #       - "exclude-ssl-host.com"
+  ssl:
+    - "*.example.com"
+    - "api.example.com"
+    - host: "internal.example.com"
+      port: 8443
+
+recording:
+  # Locations whose traffic should be recorded in Charles's session log.
+  # This is independent of `proxy.ssl` above — a host can be recorded
+  # without its SSL traffic being decrypted, e.g. plain HTTP traffic.
+  #
+  # Each entry is either a bare hostname string (shorthand for
+  # `{host: "..."}`, matching any protocol/port/path/query), or an object
+  # with any subset of `protocol`, `host`, `port`, `path`, `query` — an
+  # omitted field matches all values, same as leaving it blank in Charles's
+  # own "Recording Settings" dialog. Wildcards (`*`) are supported.
+  hosts:
+    - "*.example.com"
+    - "api.example.com"
+    - "internal.example.com"
+    - "some-plain-http-host.example.com"
+    - protocol: https
+      host: "scoped.example.com"
+      path: "/debug"
+
+access_control:
+  # IP ranges permitted to access the proxy — each entry can be full CIDR
+  # notation ("10.0.0.0/8") or a bare IP ("10.0.1.20"), which is treated as
+  # /32 (that single host). Only commit ranges here that genuinely apply to
+  # the whole team, e.g. a shared corporate subnet, or "all" (shorthand for
+  # 0.0.0.0/0) if anyone should be able to reach it. A developer's own
+  # machine/network is per-developer and belongs in the `ip_ranges` action
+  # option / `FL_CHARLES_IP_RANGES` env var instead — the two lists are
+  # merged at runtime.
+  ip_ranges:
+    - "all"

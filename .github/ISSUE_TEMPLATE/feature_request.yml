@@ -1,0 +1,24 @@
+name: Feature Request
+description: Suggest an enhancement to the charles action or charles.yml schema
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If this relates to a Charles `toolConfiguration` tool (Breakpoints, Rewrite, Map Remote, Block List, etc.), please check [docs/tool-configuration.md](https://github.com/jakekrog/fastlane-plugin-charles/blob/main/docs/tool-configuration.md) first — several were already evaluated there, with notes on why they were or weren't taken on.
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: What's the use case?
+      description: What are you trying to do, and why don't the existing options cover it?
+    validations:
+      required: true
+
+  - type: textarea
+    id: shape
+    attributes:
+      label: Proposed shape
+      description: A rough sketch of how this would look in `charles.yml` or as an action option, if applicable.
+    validations:
+      required: false

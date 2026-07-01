@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a question
+    url: https://github.com/jakekrog/fastlane-plugin-charles/blob/main/CONTRIBUTING.md#i-have-a-question
+    about: Check the README and existing issues first, then see this section for how to ask.

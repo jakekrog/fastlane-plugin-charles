@@ -1,0 +1,66 @@
+name: Bug Report
+description: Report a problem with the charles action
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing, please search [existing issues](https://github.com/jakekrog/fastlane-plugin-charles/issues) to check it hasn't already been reported.
+
+  - type: input
+    id: plugin-version
+    attributes:
+      label: fastlane-plugin-charles version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: input
+    id: fastlane-version
+    attributes:
+      label: fastlane version
+      description: Output of `fastlane --version`
+    validations:
+      required: true
+
+  - type: input
+    id: ruby-version
+    attributes:
+      label: Ruby version
+      description: Output of `ruby -v`
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happened?
+      description: Include the full error output if there was one.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Ideally with a minimal `charles.yml` (redact anything sensitive).
+    validations:
+      required: true
+
+  - type: dropdown
+    id: reproducibility
+    attributes:
+      label: Is this reproducible consistently?
+      options:
+        - "Yes, every time"
+        - "Sometimes"
+        - "Only happened once"
+    validations:
+      required: true

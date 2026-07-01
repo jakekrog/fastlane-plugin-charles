@@ -1,0 +1,30 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+      - id: check-case-conflict
+
+  # Runs through the project's own Bundler-pinned rubocop (same version/config
+  # CI enforces), rather than an isolated install pre-commit manages itself.
+  - repo: local
+    hooks:
+      - id: rubocop
+        name: rubocop
+        entry: bundle exec rubocop
+        language: system
+        types: [ruby]
+
+  # mdl isn't part of this project's Gemfile/CI gate, so it's fine to let
+  # pre-commit provision it in its own isolated environment instead. Override
+  # the upstream language_version pin (3.3.0) to "system" so pre-commit uses
+  # the Ruby already installed here instead of compiling one from source.
+  - repo: https://github.com/markdownlint/markdownlint
+    rev: v0.17.0
+    hooks:
+      - id: markdownlint
+        language_version: system
