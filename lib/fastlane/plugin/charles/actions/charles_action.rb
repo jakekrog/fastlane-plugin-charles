@@ -23,7 +23,8 @@ module Fastlane
           Actions.sh(*Helper::CharlesHelper.build_launch_command(
             charles_app_path,
             charles_config_path,
-            debug: params[:debug]
+            debug: params[:debug],
+            data_path: params[:data_path]
           ))
         end
       end
@@ -91,6 +92,13 @@ module Fastlane
             optional: true,
             type: Boolean,
             default_value: false
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :data_path,
+            env_name: 'FL_CHARLES_DATA_PATH',
+            description: 'Charles application data directory to use (passes --data)',
+            optional: true,
+            type: String
           )
         ]
       end
@@ -105,7 +113,8 @@ module Fastlane
           'charles(app_path: "/path/to/Charles") # Override the OS-specific default',
           'charles(config_path: "/path/to/charles.yml")',
           'charles(app_path: "/custom/path/to/Charles", config_path: "/custom/path/to/charles.yml")',
-          'charles(debug: true) # Enable Charles debug-level logging'
+          'charles(debug: true) # Enable Charles debug-level logging',
+          'charles(data_path: "/tmp/charles-data") # Use an isolated Charles data directory'
         ]
       end
 

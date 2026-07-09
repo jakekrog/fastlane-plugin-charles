@@ -143,7 +143,7 @@ optionally opening session files).
 | Option | Status | Notes |
 | ------ | ------ | ----- |
 | `--config <path>` | **Supported** | Plugin generates a temp `.config` from YAML and passes `-config`. Confirm whether `-config` and `--config` are interchangeable across platforms/versions when expanding coverage. |
-| `--data <path>` | Deferred | Overrides Charles's application data directory. Useful for isolating CI/agent runs from a developer's interactive Charles profile, and may pair with `--headless`. Needs investigation of what lives under the data dir (profiles, SSL store, etc.). |
+| `--data <path>` | **Supported** | Overrides Charles's application data directory. Exposed as the `data_path` action option / `FL_CHARLES_DATA_PATH` env var — useful for isolating CI or lane runs from a developer's interactive Charles profile. |
 | `--debug` | **Supported** | Session-scoped debug logging. Exposed as the `debug` action option / `FL_CHARLES_DEBUG` env var. |
 | `--headless` | High value | Launch without UI — the clearest fit for unattended lanes/CI. Should be an early follow-up once launch-option plumbing exists. |
 | `--throttling` | Deferred | Activates throttling for the session. Only useful once throttling settings themselves are representable (likely via `toolConfiguration` / config XML, see [`tool-configuration.md`](tool-configuration.md)); a bare flag without shared throttle presets is low value. |
@@ -153,7 +153,7 @@ optionally opening session files).
 ### Suggested incremental order (launch options)
 
 1. Plumb optional launch flags through the action (`headless`, then `debug`).
-2. Add `--data` once there's a concrete isolation story (CI temp dir, etc.).
+2. ~~Add `--data` once there's a concrete isolation story (CI temp dir, etc.).~~ `--data` is supported via `data_path`; callers choose the directory (e.g. a CI temp dir).
 3. Revisit `--throttling` only after throttle config can be expressed in YAML.
 4. Treat `--version` / opening session files as separate, lower-priority surfaces.
 

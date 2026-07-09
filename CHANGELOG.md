@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `debug` action option (`FL_CHARLES_DEBUG`) to pass Charles's `--debug`
   flag and enable session-scoped debug logging when launching the proxy.
+- `data_path` action option (`FL_CHARLES_DATA_PATH`) to pass Charles's
+  `--data` flag and use an isolated application data directory for the session.
 
 ## [0.1.0] - 2026-06-30
 

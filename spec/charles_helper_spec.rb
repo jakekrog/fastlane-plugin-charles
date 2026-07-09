@@ -325,5 +325,38 @@ describe Fastlane::Helper::CharlesHelper do
 
       expect(command).to eq(['/Charles', '-config', '/tmp/charles.config'])
     end
+
+    it 'appends --data and its path when data_path is set' do
+      command = described_class.build_launch_command('/Charles', '/tmp/charles.config', data_path: '/tmp/charles-data')
+
+      expect(command).to eq(['/Charles', '-config', '/tmp/charles.config', '--data', '/tmp/charles-data'])
+    end
+
+    it 'omits --data when data_path is nil or empty' do
+      expect(described_class.build_launch_command('/Charles', '/tmp/charles.config')).to eq(
+        ['/Charles', '-config', '/tmp/charles.config']
+      )
+      expect(described_class.build_launch_command('/Charles', '/tmp/charles.config', data_path: '')).to eq(
+        ['/Charles', '-config', '/tmp/charles.config']
+      )
+    end
+
+    it 'places --data before --debug when both are set' do
+      command = described_class.build_launch_command(
+        '/Charles',
+        '/tmp/charles.config',
+        data_path: '/tmp/charles-data',
+        debug: true
+      )
+
+      expect(command).to eq([
+        '/Charles',
+        '-config',
+        '/tmp/charles.config',
+        '--data',
+        '/tmp/charles-data',
+        '--debug'
+      ])
+    end
   end
 end
