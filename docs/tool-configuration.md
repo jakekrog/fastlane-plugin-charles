@@ -6,6 +6,28 @@ None of these are currently represented in the simplified `charles.yml`
 schema — this doc records why, and how each entry was evaluated, so that
 context isn't lost if this gets picked up later (by us or anyone else).
 
+## A note on export formats
+
+Charles produces XML with different root elements depending on how it was
+generated, which matters for anything that wants to *ingest* Charles XML
+(not just this plugin's own generation direction):
+
+- A `.config` file used with `-config` (or produced by launching Charles
+  against one and letting it persist changes) is rooted at
+  `<configuration>` — this is the format this plugin generates.
+- `File > Import/Export All Data` produces a full export rooted at
+  `<charles-export>` instead, with the same child sections
+  (`proxyConfiguration`, `recordingConfiguration`, etc.) but some
+  additional top-level sections not present in a plain `.config` file (see
+  `focusConfiguration` below).
+- Exporting a single pane (e.g. the Breakpoints pane) produces a document
+  rooted at that pane's own element (e.g. `<breakpoints>`) with no
+  `<configuration>`/`<charles-export>` wrapper at all.
+
+Anything parsing real-world Charles XML (as opposed to generating it, which
+is all this plugin currently does) needs to detect which of these it's
+looking at rather than assume one fixed root.
+
 ## Decision
 
 Deferred entirely for v0.1. The basic plugin (proxy SSL/SOCKS, recording,
@@ -41,7 +63,10 @@ portable across a team even if the schema were generalized:
 ### Good fits — same cheap `hosts`/location + toggle pattern already in use
 
 No local/session-specific state, and the schema is basically what `recording`
-already uses (a list of location matchers + an enabled flag):
+already uses — a list of location matchers, each optionally with an
+`enabled: false` toggle (this part is no longer aspirational; `recording.hosts`
+supports it as of the entry that also documents it, mirroring the per-entry
+`<enabled>` flag confirmed present in real Charles exports):
 
 - **No Caching**
 - **Block Cookies**
@@ -72,6 +97,29 @@ complex:
 - **DNS Spoofing** — redirects a hostname to a specific IP. Could be shared if
   a team always points a host at the same staging IP, but the target IP is the
   kind of thing that can vary per-environment.
+
+### Not applicable — action-only tools with no serializable state
+
+A later, fuller `File > Import/Export All Data` export revealed several
+`toolConfiguration` entries not seen in the original per-`.config`-file
+evaluation above: `Repeat`, `Compose`, `AdvancedRepeat`, `Compose New…`,
+`Validator`, and `Publish Gist`. All six always serialize as `<null/>`,
+including in an export from an actively-used Charles session — these are
+one-shot UI actions/dialogs (e.g. "repeat this request"), not configurable
+settings panes, so there's nothing to represent in `charles.yml` for them
+regardless of schema design. Unlike the categories above, this isn't a
+judgment call to revisit later; there's no state to carry.
+
+### A section outside `toolConfiguration` entirely: `focusConfiguration`
+
+The same fuller export also showed a top-level `<focusConfiguration>`
+section — a sibling of `proxyConfiguration`/`recordingConfiguration`, not
+nested under `toolConfiguration` — containing a `hosts` location-matcher
+list for Charles's "Focus" feature (restricts the session view to matching
+traffic). Structurally this is a "good fit" by the same reasoning as
+`recording.hosts` (just a list of location matchers, no local/session
+state), but it's out of scope for this pass; noting it here so it isn't
+lost, similar to the tool-pane entries above.
 
 ## Open questions for whenever this is picked up
 

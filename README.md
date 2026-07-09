@@ -51,6 +51,8 @@ Check out the [example `Fastfile`](fastlane/Fastfile) to see how to use this plu
 
 `charles.yml` doesn't yet cover Charles's `toolConfiguration` tools (Breakpoints, Rewrite, Map Remote, Block List, etc.) — see [`docs/tool-configuration.md`](docs/tool-configuration.md) for the per-tool evaluation and why that's deferred to a future release.
 
+The Charles binary also exposes a broader CLI (`--headless`, `convert`, `filter`, `ssl`, …) beyond the `--config` launch path this plugin uses today — see [`docs/charles-cli.md`](docs/charles-cli.md) for a snapshot of that surface and an incremental support roadmap.
+
 ## Run tests for this plugin
 
 To run both the tests, and code style validation, run
