@@ -24,7 +24,8 @@ module Fastlane
             charles_app_path,
             charles_config_path,
             debug: params[:debug],
-            data_path: params[:data_path]
+            data_path: params[:data_path],
+            headless: params[:headless]
           ))
         end
       end
@@ -99,6 +100,14 @@ module Fastlane
             description: 'Charles application data directory to use (passes --data)',
             optional: true,
             type: String
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :headless,
+            env_name: 'FL_CHARLES_HEADLESS',
+            description: 'Launch Charles without a UI (passes --headless)',
+            optional: true,
+            type: Boolean,
+            default_value: false
           )
         ]
       end
@@ -114,7 +123,8 @@ module Fastlane
           'charles(config_path: "/path/to/charles.yml")',
           'charles(app_path: "/custom/path/to/Charles", config_path: "/custom/path/to/charles.yml")',
           'charles(debug: true) # Enable Charles debug-level logging',
-          'charles(data_path: "/tmp/charles-data") # Use an isolated Charles data directory'
+          'charles(data_path: "/tmp/charles-data") # Use an isolated Charles data directory',
+          'charles(headless: true) # Launch Charles without a UI'
         ]
       end
 

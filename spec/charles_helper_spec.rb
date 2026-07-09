@@ -358,5 +358,37 @@ describe Fastlane::Helper::CharlesHelper do
         '--debug'
       ])
     end
+
+    it 'appends --headless when headless is true' do
+      command = described_class.build_launch_command('/Charles', '/tmp/charles.config', headless: true)
+
+      expect(command).to eq(['/Charles', '-config', '/tmp/charles.config', '--headless'])
+    end
+
+    it 'omits --headless when headless is false' do
+      command = described_class.build_launch_command('/Charles', '/tmp/charles.config', headless: false)
+
+      expect(command).to eq(['/Charles', '-config', '/tmp/charles.config'])
+    end
+
+    it 'orders optional flags as --data, --debug, --headless' do
+      command = described_class.build_launch_command(
+        '/Charles',
+        '/tmp/charles.config',
+        data_path: '/tmp/charles-data',
+        debug: true,
+        headless: true
+      )
+
+      expect(command).to eq([
+        '/Charles',
+        '-config',
+        '/tmp/charles.config',
+        '--data',
+        '/tmp/charles-data',
+        '--debug',
+        '--headless'
+      ])
+    end
   end
 end
