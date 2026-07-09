@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `--data` flag and use an isolated application data directory for the session.
 - `headless` action option (`FL_CHARLES_HEADLESS`) to pass Charles's
   `--headless` flag and launch the proxy without a UI.
+- `throttling` action option (`FL_CHARLES_THROTTLING`) to pass Charles's
+  `--throttling` flag and activate throttling for the session.
 
 ## [0.1.0] - 2026-06-30
 

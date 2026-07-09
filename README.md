@@ -32,6 +32,7 @@ Currently macOS only (the default `app_path` points at the standard macOS Charle
 | `debug` | `FL_CHARLES_DEBUG` | Enable debug-level logging for this Charles session | `false` |
 | `data_path` | `FL_CHARLES_DATA_PATH` | Charles application data directory to use (passes `--data`) | none |
 | `headless` | `FL_CHARLES_HEADLESS` | Launch Charles without a UI (passes `--headless`) | `false` |
+| `throttling` | `FL_CHARLES_THROTTLING` | Activate throttling for this Charles session (passes `--throttling`) | `false` |
 
 `registered_name` and `registered_key` are intentionally kept out of `charles.yml` since they're per-developer secrets, not shared team config — set them via env vars (or a `.env` file fastlane will load) instead of committing them. They must be provided together.
 
@@ -47,6 +48,7 @@ charles(app_path: "/custom/path/to/Charles", config_path: "/custom/path/to/charl
 charles(debug: true)
 charles(data_path: "/tmp/charles-data")
 charles(headless: true)
+charles(throttling: true)
 ```
 
 ## Example

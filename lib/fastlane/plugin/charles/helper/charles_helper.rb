@@ -18,11 +18,12 @@ module Fastlane
       # Builds the argv array for launching Charles. Optional flags are
       # appended only when enabled so callers can splat straight into
       # Actions.sh(*build_launch_command(...)).
-      def self.build_launch_command(app_path, config_path, debug: false, data_path: nil, headless: false)
+      def self.build_launch_command(app_path, config_path, debug: false, data_path: nil, headless: false, throttling: false)
         command = [app_path, '-config', config_path]
         command.push('--data', data_path) unless data_path.to_s.empty?
         command << '--debug' if debug
         command << '--headless' if headless
+        command << '--throttling' if throttling
         command
       end
 

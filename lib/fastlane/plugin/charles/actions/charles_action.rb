@@ -25,7 +25,8 @@ module Fastlane
             charles_config_path,
             debug: params[:debug],
             data_path: params[:data_path],
-            headless: params[:headless]
+            headless: params[:headless],
+            throttling: params[:throttling]
           ))
         end
       end
@@ -108,6 +109,14 @@ module Fastlane
             optional: true,
             type: Boolean,
             default_value: false
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :throttling,
+            env_name: 'FL_CHARLES_THROTTLING',
+            description: 'Activate throttling for this Charles session (passes --throttling)',
+            optional: true,
+            type: Boolean,
+            default_value: false
           )
         ]
       end
@@ -124,7 +133,8 @@ module Fastlane
           'charles(app_path: "/custom/path/to/Charles", config_path: "/custom/path/to/charles.yml")',
           'charles(debug: true) # Enable Charles debug-level logging',
           'charles(data_path: "/tmp/charles-data") # Use an isolated Charles data directory',
-          'charles(headless: true) # Launch Charles without a UI'
+          'charles(headless: true) # Launch Charles without a UI',
+          'charles(throttling: true) # Activate throttling for this session'
         ]
       end
 

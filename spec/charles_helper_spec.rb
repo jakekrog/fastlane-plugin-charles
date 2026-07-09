@@ -371,13 +371,26 @@ describe Fastlane::Helper::CharlesHelper do
       expect(command).to eq(['/Charles', '-config', '/tmp/charles.config'])
     end
 
-    it 'orders optional flags as --data, --debug, --headless' do
+    it 'appends --throttling when throttling is true' do
+      command = described_class.build_launch_command('/Charles', '/tmp/charles.config', throttling: true)
+
+      expect(command).to eq(['/Charles', '-config', '/tmp/charles.config', '--throttling'])
+    end
+
+    it 'omits --throttling when throttling is false' do
+      command = described_class.build_launch_command('/Charles', '/tmp/charles.config', throttling: false)
+
+      expect(command).to eq(['/Charles', '-config', '/tmp/charles.config'])
+    end
+
+    it 'orders optional flags as --data, --debug, --headless, --throttling' do
       command = described_class.build_launch_command(
         '/Charles',
         '/tmp/charles.config',
         data_path: '/tmp/charles-data',
         debug: true,
-        headless: true
+        headless: true,
+        throttling: true
       )
 
       expect(command).to eq([
@@ -387,7 +400,8 @@ describe Fastlane::Helper::CharlesHelper do
         '--data',
         '/tmp/charles-data',
         '--debug',
-        '--headless'
+        '--headless',
+        '--throttling'
       ])
     end
   end
