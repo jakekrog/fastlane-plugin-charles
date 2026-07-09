@@ -15,6 +15,15 @@ module Fastlane
       ALL_IP_RANGES_CIDR = '0.0.0.0/0'.freeze
       CIDR_PATTERN = %r{\A(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(?:/(\d{1,2}))?\z}
 
+      # Builds the argv array for launching Charles. Optional flags are
+      # appended only when enabled so callers can splat straight into
+      # Actions.sh(*build_launch_command(...)).
+      def self.build_launch_command(app_path, config_path, debug: false)
+        command = [app_path, '-config', config_path]
+        command << '--debug' if debug
+        command
+      end
+
       # Charles's standard location matcher (used by recording, and future
       # tools like block/allow lists) supports protocol/host/port/path/query,
       # each optional — Charles treats a blank field as "match all values".

@@ -29,6 +29,7 @@ Currently macOS only (the default `app_path` points at the standard macOS Charle
 | `registered_name` | `FL_CHARLES_REGISTERED_NAME` | Registered name for your Charles Proxy license | none |
 | `registered_key` | `FL_CHARLES_REGISTERED_KEY` | License key for your Charles Proxy registration | none |
 | `ip_ranges` | `FL_CHARLES_IP_RANGES` | Per-developer IP ranges permitted to access the proxy | `[]` |
+| `debug` | `FL_CHARLES_DEBUG` | Enable debug-level logging for this Charles session | `false` |
 
 `registered_name` and `registered_key` are intentionally kept out of `charles.yml` since they're per-developer secrets, not shared team config — set them via env vars (or a `.env` file fastlane will load) instead of committing them. They must be provided together.
 
@@ -41,6 +42,7 @@ charles # Use default paths
 charles(app_path: "/path/to/Charles.app/Contents/MacOS/Charles")
 charles(config_path: "/path/to/charles.yml")
 charles(app_path: "/custom/path/to/Charles", config_path: "/custom/path/to/charles.yml")
+charles(debug: true)
 ```
 
 ## Example

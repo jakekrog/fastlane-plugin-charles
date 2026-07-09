@@ -144,7 +144,7 @@ optionally opening session files).
 | ------ | ------ | ----- |
 | `--config <path>` | **Supported** | Plugin generates a temp `.config` from YAML and passes `-config`. Confirm whether `-config` and `--config` are interchangeable across platforms/versions when expanding coverage. |
 | `--data <path>` | Deferred | Overrides Charles's application data directory. Useful for isolating CI/agent runs from a developer's interactive Charles profile, and may pair with `--headless`. Needs investigation of what lives under the data dir (profiles, SSL store, etc.). |
-| `--debug` | Easy win | Session-scoped debug logging. Cheap boolean action option; mainly useful when diagnosing plugin/Charles interaction. |
+| `--debug` | **Supported** | Session-scoped debug logging. Exposed as the `debug` action option / `FL_CHARLES_DEBUG` env var. |
 | `--headless` | High value | Launch without UI — the clearest fit for unattended lanes/CI. Should be an early follow-up once launch-option plumbing exists. |
 | `--throttling` | Deferred | Activates throttling for the session. Only useful once throttling settings themselves are representable (likely via `toolConfiguration` / config XML, see [`tool-configuration.md`](tool-configuration.md)); a bare flag without shared throttle presets is low value. |
 | `--version` | Low priority | Version probe. Handy for diagnostics/support, not for the main `charles` lane. Could be a separate helper/action later. |

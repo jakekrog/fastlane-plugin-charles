@@ -20,7 +20,11 @@ module Fastlane
           charles_config_path = File.join(tmp_dir, 'charles.config')
           File.write(charles_config_path, config_xml)
 
-          Actions.sh(charles_app_path, '-config', charles_config_path)
+          Actions.sh(*Helper::CharlesHelper.build_launch_command(
+            charles_app_path,
+            charles_config_path,
+            debug: params[:debug]
+          ))
         end
       end
 
@@ -79,6 +83,14 @@ module Fastlane
             optional: true,
             type: Array,
             default_value: []
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :debug,
+            env_name: 'FL_CHARLES_DEBUG',
+            description: 'Enable debug-level logging for this Charles session',
+            optional: true,
+            type: Boolean,
+            default_value: false
           )
         ]
       end
@@ -90,9 +102,10 @@ module Fastlane
       def self.example_code
         [
           'charles # Use default paths',
-          'charles(app_path: "/path/to/Charles.app/Contents/MacOS/Charles")',
+          'charles(app_path: "/path/to/Charles") # Override the OS-specific default',
           'charles(config_path: "/path/to/charles.yml")',
-          'charles(app_path: "/custom/path/to/Charles", config_path: "/custom/path/to/charles.yml")'
+          'charles(app_path: "/custom/path/to/Charles", config_path: "/custom/path/to/charles.yml")',
+          'charles(debug: true) # Enable Charles debug-level logging'
         ]
       end
 

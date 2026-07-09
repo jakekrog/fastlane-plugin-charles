@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `debug` action option (`FL_CHARLES_DEBUG`) to pass Charles's `--debug`
+  flag and enable session-scoped debug logging when launching the proxy.
+
 ## [0.1.0] - 2026-06-30
 
 ### Added

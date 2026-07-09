@@ -306,4 +306,24 @@ describe Fastlane::Helper::CharlesHelper do
       end.to raise_error(FastlaneCore::Interface::FastlaneError, /prefix must be 0-32/)
     end
   end
+
+  describe '.build_launch_command' do
+    it 'builds the base launch argv' do
+      command = described_class.build_launch_command('/Charles', '/tmp/charles.config')
+
+      expect(command).to eq(['/Charles', '-config', '/tmp/charles.config'])
+    end
+
+    it 'appends --debug when debug is true' do
+      command = described_class.build_launch_command('/Charles', '/tmp/charles.config', debug: true)
+
+      expect(command).to eq(['/Charles', '-config', '/tmp/charles.config', '--debug'])
+    end
+
+    it 'omits --debug when debug is false' do
+      command = described_class.build_launch_command('/Charles', '/tmp/charles.config', debug: false)
+
+      expect(command).to eq(['/Charles', '-config', '/tmp/charles.config'])
+    end
+  end
 end
