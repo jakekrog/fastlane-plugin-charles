@@ -350,13 +350,13 @@ describe Fastlane::Helper::CharlesHelper do
       )
 
       expect(command).to eq([
-        '/Charles',
-        '--config',
-        '/tmp/charles.config',
-        '--data',
-        '/tmp/charles-data',
-        '--debug'
-      ])
+                              '/Charles',
+                              '--config',
+                              '/tmp/charles.config',
+                              '--data',
+                              '/tmp/charles-data',
+                              '--debug'
+                            ])
     end
 
     it 'appends --headless when headless is true' do
@@ -394,15 +394,15 @@ describe Fastlane::Helper::CharlesHelper do
       )
 
       expect(command).to eq([
-        '/Charles',
-        '--config',
-        '/tmp/charles.config',
-        '--data',
-        '/tmp/charles-data',
-        '--debug',
-        '--headless',
-        '--throttling'
-      ])
+                              '/Charles',
+                              '--config',
+                              '/tmp/charles.config',
+                              '--data',
+                              '/tmp/charles-data',
+                              '--debug',
+                              '--headless',
+                              '--throttling'
+                            ])
     end
   end
 
