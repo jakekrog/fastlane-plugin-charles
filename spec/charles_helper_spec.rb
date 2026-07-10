@@ -311,33 +311,33 @@ describe Fastlane::Helper::CharlesHelper do
     it 'builds the base launch argv' do
       command = described_class.build_launch_command('/Charles', '/tmp/charles.config')
 
-      expect(command).to eq(['/Charles', '-config', '/tmp/charles.config'])
+      expect(command).to eq(['/Charles', '--config', '/tmp/charles.config'])
     end
 
     it 'appends --debug when debug is true' do
       command = described_class.build_launch_command('/Charles', '/tmp/charles.config', debug: true)
 
-      expect(command).to eq(['/Charles', '-config', '/tmp/charles.config', '--debug'])
+      expect(command).to eq(['/Charles', '--config', '/tmp/charles.config', '--debug'])
     end
 
     it 'omits --debug when debug is false' do
       command = described_class.build_launch_command('/Charles', '/tmp/charles.config', debug: false)
 
-      expect(command).to eq(['/Charles', '-config', '/tmp/charles.config'])
+      expect(command).to eq(['/Charles', '--config', '/tmp/charles.config'])
     end
 
     it 'appends --data and its path when data_path is set' do
       command = described_class.build_launch_command('/Charles', '/tmp/charles.config', data_path: '/tmp/charles-data')
 
-      expect(command).to eq(['/Charles', '-config', '/tmp/charles.config', '--data', '/tmp/charles-data'])
+      expect(command).to eq(['/Charles', '--config', '/tmp/charles.config', '--data', '/tmp/charles-data'])
     end
 
     it 'omits --data when data_path is nil or empty' do
       expect(described_class.build_launch_command('/Charles', '/tmp/charles.config')).to eq(
-        ['/Charles', '-config', '/tmp/charles.config']
+        ['/Charles', '--config', '/tmp/charles.config']
       )
       expect(described_class.build_launch_command('/Charles', '/tmp/charles.config', data_path: '')).to eq(
-        ['/Charles', '-config', '/tmp/charles.config']
+        ['/Charles', '--config', '/tmp/charles.config']
       )
     end
 
@@ -351,7 +351,7 @@ describe Fastlane::Helper::CharlesHelper do
 
       expect(command).to eq([
         '/Charles',
-        '-config',
+        '--config',
         '/tmp/charles.config',
         '--data',
         '/tmp/charles-data',
@@ -362,25 +362,25 @@ describe Fastlane::Helper::CharlesHelper do
     it 'appends --headless when headless is true' do
       command = described_class.build_launch_command('/Charles', '/tmp/charles.config', headless: true)
 
-      expect(command).to eq(['/Charles', '-config', '/tmp/charles.config', '--headless'])
+      expect(command).to eq(['/Charles', '--config', '/tmp/charles.config', '--headless'])
     end
 
     it 'omits --headless when headless is false' do
       command = described_class.build_launch_command('/Charles', '/tmp/charles.config', headless: false)
 
-      expect(command).to eq(['/Charles', '-config', '/tmp/charles.config'])
+      expect(command).to eq(['/Charles', '--config', '/tmp/charles.config'])
     end
 
     it 'appends --throttling when throttling is true' do
       command = described_class.build_launch_command('/Charles', '/tmp/charles.config', throttling: true)
 
-      expect(command).to eq(['/Charles', '-config', '/tmp/charles.config', '--throttling'])
+      expect(command).to eq(['/Charles', '--config', '/tmp/charles.config', '--throttling'])
     end
 
     it 'omits --throttling when throttling is false' do
       command = described_class.build_launch_command('/Charles', '/tmp/charles.config', throttling: false)
 
-      expect(command).to eq(['/Charles', '-config', '/tmp/charles.config'])
+      expect(command).to eq(['/Charles', '--config', '/tmp/charles.config'])
     end
 
     it 'orders optional flags as --data, --debug, --headless, --throttling' do
@@ -395,7 +395,7 @@ describe Fastlane::Helper::CharlesHelper do
 
       expect(command).to eq([
         '/Charles',
-        '-config',
+        '--config',
         '/tmp/charles.config',
         '--data',
         '/tmp/charles-data',

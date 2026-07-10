@@ -2,8 +2,7 @@
 
 Charles ships a command-line interface on the same binary this plugin launches
 (`/Applications/Charles.app/Contents/MacOS/Charles` on macOS). Today the
-plugin only uses `--config` (passed as `-config`) when starting a proxy
-session. This doc snapshots the rest of the CLI as of Charles 5.2 so support
+plugin uses `--config` when starting a proxy session. This doc snapshots the rest of the CLI as of Charles 5.2 so support
 can be added incrementally without rediscovering the surface each time.
 
 ## Snapshot
@@ -129,10 +128,10 @@ Usage: ssl store
 `CharlesAction` already invokes:
 
 ```text
-<app_path> -config <generated charles.config>
+<app_path> --config <generated charles.config> [--data …] [--debug] [--headless] [--throttling]
 ```
 
-That maps to the `--config` option below. Nothing else from this surface is
+Nothing else from this CLI surface is
 wired through yet (neither the fastlane action nor `charles-proxy-cli`).
 
 ## Launch options
@@ -142,7 +141,7 @@ optionally opening session files).
 
 | Option | Status | Notes |
 | ------ | ------ | ----- |
-| `--config <path>` | **Supported** | Plugin generates a temp `.config` from YAML and passes `-config`. Confirm whether `-config` and `--config` are interchangeable across platforms/versions when expanding coverage. |
+| `--config <path>` | **Supported** | Plugin generates a temp `.config` from YAML and passes `--config`. |
 | `--data <path>` | **Supported** | Overrides Charles's application data directory. Exposed as the `data_path` action option / `FL_CHARLES_DATA_PATH` env var — useful for isolating CI or lane runs from a developer's interactive Charles profile. |
 | `--debug` | **Supported** | Session-scoped debug logging. Exposed as the `debug` action option / `FL_CHARLES_DEBUG` env var. |
 | `--headless` | **Supported** | Launch without UI. Exposed as the `headless` action option / `FL_CHARLES_HEADLESS` env var — the primary fit for unattended lanes and CI. |
@@ -218,6 +217,5 @@ varies (top-level help only sketches them).
   are useful outside fastlane?
 - For `--data`: is a plugin-managed temp data dir the right default in CI, or
   an explicit opt-in?
-- Confirm flag spelling (`-config` vs `--config`) and whether Windows
-  `Charles.exe` exposes the same CLI surface before advertising
-  cross-platform command support.
+- Confirm whether Windows `Charles.exe` exposes the same CLI surface before
+  advertising cross-platform command support.

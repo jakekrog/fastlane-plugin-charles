@@ -20,7 +20,7 @@ describe Fastlane::Actions::CharlesAction do
       expect(Fastlane::Actions).to receive(:sh) do |*args|
         app_path, flag, config_path = args
         expect(app_path).to eq(params[:app_path])
-        expect(flag).to eq('-config')
+        expect(flag).to eq('--config')
         expect(args).not_to include('--debug')
         expect(args).not_to include('--data')
         expect(args).not_to include('--headless')
@@ -47,7 +47,7 @@ describe Fastlane::Actions::CharlesAction do
       expect(Fastlane::Helper::CharlesHelper).to receive(:generate_config_xml).and_return('<configuration></configuration>')
       expect(Fastlane::Actions).to receive(:sh) do |*args|
         expect(args[0]).to eq(params[:app_path])
-        expect(args[1]).to eq('-config')
+        expect(args[1]).to eq('--config')
         expect(args[2]).to be_a(String)
         expect(args[3]).to eq('--debug')
       end
@@ -68,7 +68,7 @@ describe Fastlane::Actions::CharlesAction do
       expect(Fastlane::Helper::CharlesHelper).to receive(:generate_config_xml).and_return('<configuration></configuration>')
       expect(Fastlane::Actions).to receive(:sh) do |*args|
         expect(args[0]).to eq(params[:app_path])
-        expect(args[1]).to eq('-config')
+        expect(args[1]).to eq('--config')
         expect(args[2]).to be_a(String)
         expect(args[3..4]).to eq(['--data', '/tmp/charles-data'])
       end
@@ -89,7 +89,7 @@ describe Fastlane::Actions::CharlesAction do
       expect(Fastlane::Helper::CharlesHelper).to receive(:generate_config_xml).and_return('<configuration></configuration>')
       expect(Fastlane::Actions).to receive(:sh) do |*args|
         expect(args[0]).to eq(params[:app_path])
-        expect(args[1]).to eq('-config')
+        expect(args[1]).to eq('--config')
         expect(args[2]).to be_a(String)
         expect(args[3]).to eq('--headless')
       end
@@ -110,7 +110,7 @@ describe Fastlane::Actions::CharlesAction do
       expect(Fastlane::Helper::CharlesHelper).to receive(:generate_config_xml).and_return('<configuration></configuration>')
       expect(Fastlane::Actions).to receive(:sh) do |*args|
         expect(args[0]).to eq(params[:app_path])
-        expect(args[1]).to eq('-config')
+        expect(args[1]).to eq('--config')
         expect(args[2]).to be_a(String)
         expect(args[3]).to eq('--throttling')
       end
