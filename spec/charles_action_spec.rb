@@ -17,9 +17,14 @@ describe Fastlane::Actions::CharlesAction do
         registered_key: 'abc123',
         ip_ranges: ['10.0.1.20/32']
       ).and_return(generated_xml)
-      expect(Fastlane::Actions).to receive(:sh) do |app_path, flag, config_path|
+      expect(Fastlane::Actions).to receive(:sh) do |*args|
+        app_path, flag, config_path = args
         expect(app_path).to eq(params[:app_path])
-        expect(flag).to eq('-config')
+        expect(flag).to eq('--config')
+        expect(args).not_to include('--debug')
+        expect(args).not_to include('--data')
+        expect(args).not_to include('--headless')
+        expect(args).not_to include('--throttling')
         expect(File.read(config_path)).to eq(generated_xml)
         written_config_path = config_path
       end
@@ -27,6 +32,90 @@ describe Fastlane::Actions::CharlesAction do
       Fastlane::Actions::CharlesAction.run(params)
 
       expect(File.exist?(written_config_path)).to be(false)
+    end
+
+    it 'passes --debug when debug is true' do
+      params = {
+        app_path: '/Applications/Charles.app/Contents/MacOS/Charles',
+        config_path: 'charles.yml',
+        registered_name: nil,
+        registered_key: nil,
+        ip_ranges: [],
+        debug: true
+      }
+
+      expect(Fastlane::Helper::CharlesHelper).to receive(:generate_config_xml).and_return('<configuration></configuration>')
+      expect(Fastlane::Actions).to receive(:sh) do |*args|
+        expect(args[0]).to eq(params[:app_path])
+        expect(args[1]).to eq('--config')
+        expect(args[2]).to be_a(String)
+        expect(args[3]).to eq('--debug')
+      end
+
+      Fastlane::Actions::CharlesAction.run(params)
+    end
+
+    it 'passes --data when data_path is set' do
+      params = {
+        app_path: '/Applications/Charles.app/Contents/MacOS/Charles',
+        config_path: 'charles.yml',
+        registered_name: nil,
+        registered_key: nil,
+        ip_ranges: [],
+        data_path: '/tmp/charles-data'
+      }
+
+      expect(Fastlane::Helper::CharlesHelper).to receive(:generate_config_xml).and_return('<configuration></configuration>')
+      expect(Fastlane::Actions).to receive(:sh) do |*args|
+        expect(args[0]).to eq(params[:app_path])
+        expect(args[1]).to eq('--config')
+        expect(args[2]).to be_a(String)
+        expect(args[3..4]).to eq(['--data', '/tmp/charles-data'])
+      end
+
+      Fastlane::Actions::CharlesAction.run(params)
+    end
+
+    it 'passes --headless when headless is true' do
+      params = {
+        app_path: '/Applications/Charles.app/Contents/MacOS/Charles',
+        config_path: 'charles.yml',
+        registered_name: nil,
+        registered_key: nil,
+        ip_ranges: [],
+        headless: true
+      }
+
+      expect(Fastlane::Helper::CharlesHelper).to receive(:generate_config_xml).and_return('<configuration></configuration>')
+      expect(Fastlane::Actions).to receive(:sh) do |*args|
+        expect(args[0]).to eq(params[:app_path])
+        expect(args[1]).to eq('--config')
+        expect(args[2]).to be_a(String)
+        expect(args[3]).to eq('--headless')
+      end
+
+      Fastlane::Actions::CharlesAction.run(params)
+    end
+
+    it 'passes --throttling when throttling is true' do
+      params = {
+        app_path: '/Applications/Charles.app/Contents/MacOS/Charles',
+        config_path: 'charles.yml',
+        registered_name: nil,
+        registered_key: nil,
+        ip_ranges: [],
+        throttling: true
+      }
+
+      expect(Fastlane::Helper::CharlesHelper).to receive(:generate_config_xml).and_return('<configuration></configuration>')
+      expect(Fastlane::Actions).to receive(:sh) do |*args|
+        expect(args[0]).to eq(params[:app_path])
+        expect(args[1]).to eq('--config')
+        expect(args[2]).to be_a(String)
+        expect(args[3]).to eq('--throttling')
+      end
+
+      Fastlane::Actions::CharlesAction.run(params)
     end
   end
 end

@@ -306,4 +306,130 @@ describe Fastlane::Helper::CharlesHelper do
       end.to raise_error(FastlaneCore::Interface::FastlaneError, /prefix must be 0-32/)
     end
   end
+
+  describe '.build_launch_command' do
+    it 'builds the base launch argv' do
+      command = described_class.build_launch_command('/Charles', '/tmp/charles.config')
+
+      expect(command).to eq(['/Charles', '--config', '/tmp/charles.config'])
+    end
+
+    it 'appends --debug when debug is true' do
+      command = described_class.build_launch_command('/Charles', '/tmp/charles.config', debug: true)
+
+      expect(command).to eq(['/Charles', '--config', '/tmp/charles.config', '--debug'])
+    end
+
+    it 'omits --debug when debug is false' do
+      command = described_class.build_launch_command('/Charles', '/tmp/charles.config', debug: false)
+
+      expect(command).to eq(['/Charles', '--config', '/tmp/charles.config'])
+    end
+
+    it 'appends --data and its path when data_path is set' do
+      command = described_class.build_launch_command('/Charles', '/tmp/charles.config', data_path: '/tmp/charles-data')
+
+      expect(command).to eq(['/Charles', '--config', '/tmp/charles.config', '--data', '/tmp/charles-data'])
+    end
+
+    it 'omits --data when data_path is nil or empty' do
+      expect(described_class.build_launch_command('/Charles', '/tmp/charles.config')).to eq(
+        ['/Charles', '--config', '/tmp/charles.config']
+      )
+      expect(described_class.build_launch_command('/Charles', '/tmp/charles.config', data_path: '')).to eq(
+        ['/Charles', '--config', '/tmp/charles.config']
+      )
+    end
+
+    it 'places --data before --debug when both are set' do
+      command = described_class.build_launch_command(
+        '/Charles',
+        '/tmp/charles.config',
+        data_path: '/tmp/charles-data',
+        debug: true
+      )
+
+      expect(command).to eq([
+                              '/Charles',
+                              '--config',
+                              '/tmp/charles.config',
+                              '--data',
+                              '/tmp/charles-data',
+                              '--debug'
+                            ])
+    end
+
+    it 'appends --headless when headless is true' do
+      command = described_class.build_launch_command('/Charles', '/tmp/charles.config', headless: true)
+
+      expect(command).to eq(['/Charles', '--config', '/tmp/charles.config', '--headless'])
+    end
+
+    it 'omits --headless when headless is false' do
+      command = described_class.build_launch_command('/Charles', '/tmp/charles.config', headless: false)
+
+      expect(command).to eq(['/Charles', '--config', '/tmp/charles.config'])
+    end
+
+    it 'appends --throttling when throttling is true' do
+      command = described_class.build_launch_command('/Charles', '/tmp/charles.config', throttling: true)
+
+      expect(command).to eq(['/Charles', '--config', '/tmp/charles.config', '--throttling'])
+    end
+
+    it 'omits --throttling when throttling is false' do
+      command = described_class.build_launch_command('/Charles', '/tmp/charles.config', throttling: false)
+
+      expect(command).to eq(['/Charles', '--config', '/tmp/charles.config'])
+    end
+
+    it 'orders optional flags as --data, --debug, --headless, --throttling' do
+      command = described_class.build_launch_command(
+        '/Charles',
+        '/tmp/charles.config',
+        data_path: '/tmp/charles-data',
+        debug: true,
+        headless: true,
+        throttling: true
+      )
+
+      expect(command).to eq([
+                              '/Charles',
+                              '--config',
+                              '/tmp/charles.config',
+                              '--data',
+                              '/tmp/charles-data',
+                              '--debug',
+                              '--headless',
+                              '--throttling'
+                            ])
+    end
+  end
+
+  describe '.build_version_command' do
+    it 'builds the --version argv' do
+      expect(described_class.build_version_command('/Charles')).to eq(['/Charles', '--version'])
+    end
+  end
+
+  describe '.parse_version_output' do
+    it 'extracts the version token from Charles output' do
+      expect(described_class.parse_version_output("Charles Proxy 5.2\n")).to eq('5.2')
+    end
+
+    it 'extracts the version when diagnostic lines precede it' do
+      output = <<~OUTPUT
+        SEVERE   com.charlesproxy.CharlesContext Error Accessing Application Data
+        Charles Proxy 5.2
+      OUTPUT
+
+      expect(described_class.parse_version_output(output)).to eq('5.2')
+    end
+
+    it 'raises a clear error when the output is unrecognizable' do
+      expect do
+        described_class.parse_version_output('unexpected output')
+      end.to raise_error(FastlaneCore::Interface::FastlaneError, /Unable to parse Charles version/)
+    end
+  end
 end

@@ -20,7 +20,14 @@ module Fastlane
           charles_config_path = File.join(tmp_dir, 'charles.config')
           File.write(charles_config_path, config_xml)
 
-          Actions.sh(charles_app_path, '-config', charles_config_path)
+          Actions.sh(*Helper::CharlesHelper.build_launch_command(
+            charles_app_path,
+            charles_config_path,
+            debug: params[:debug],
+            data_path: params[:data_path],
+            headless: params[:headless],
+            throttling: params[:throttling]
+          ))
         end
       end
 
@@ -79,6 +86,37 @@ module Fastlane
             optional: true,
             type: Array,
             default_value: []
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :debug,
+            env_name: 'FL_CHARLES_DEBUG',
+            description: 'Enable debug-level logging for this Charles session',
+            optional: true,
+            type: Boolean,
+            default_value: false
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :data_path,
+            env_name: 'FL_CHARLES_DATA_PATH',
+            description: 'Charles application data directory to use (passes --data)',
+            optional: true,
+            type: String
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :headless,
+            env_name: 'FL_CHARLES_HEADLESS',
+            description: 'Launch Charles without a UI (passes --headless)',
+            optional: true,
+            type: Boolean,
+            default_value: false
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :throttling,
+            env_name: 'FL_CHARLES_THROTTLING',
+            description: 'Activate throttling for this Charles session (passes --throttling)',
+            optional: true,
+            type: Boolean,
+            default_value: false
           )
         ]
       end
@@ -90,9 +128,13 @@ module Fastlane
       def self.example_code
         [
           'charles # Use default paths',
-          'charles(app_path: "/path/to/Charles.app/Contents/MacOS/Charles")',
+          'charles(app_path: "/path/to/Charles") # Override the OS-specific default',
           'charles(config_path: "/path/to/charles.yml")',
-          'charles(app_path: "/custom/path/to/Charles", config_path: "/custom/path/to/charles.yml")'
+          'charles(app_path: "/custom/path/to/Charles", config_path: "/custom/path/to/charles.yml")',
+          'charles(debug: true) # Enable Charles debug-level logging',
+          'charles(data_path: "/tmp/charles-data") # Use an isolated Charles data directory',
+          'charles(headless: true) # Launch Charles without a UI',
+          'charles(throttling: true) # Activate throttling for this session'
         ]
       end
 

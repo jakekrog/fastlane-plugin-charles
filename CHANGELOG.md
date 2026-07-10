@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `debug` action option (`FL_CHARLES_DEBUG`) to pass Charles's `--debug`
+  flag and enable session-scoped debug logging when launching the proxy.
+- `data_path` action option (`FL_CHARLES_DATA_PATH`) to pass Charles's
+  `--data` flag and use an isolated application data directory for the session.
+- `headless` action option (`FL_CHARLES_HEADLESS`) to pass Charles's
+  `--headless` flag and launch the proxy without a UI.
+- `throttling` action option (`FL_CHARLES_THROTTLING`) to pass Charles's
+  `--throttling` flag and activate throttling for the session.
+- `charles_version` action to run Charles with `--version` and return the
+  parsed version string for preflight or compatibility checks.
+
 ## [0.1.0] - 2026-06-30
 
 ### Added

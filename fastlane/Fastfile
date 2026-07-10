@@ -1,3 +1,4 @@
 lane :test do
+  UI.message("Charles version: #{charles_version}")
   charles
 end

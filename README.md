@@ -29,6 +29,10 @@ Currently macOS only (the default `app_path` points at the standard macOS Charle
 | `registered_name` | `FL_CHARLES_REGISTERED_NAME` | Registered name for your Charles Proxy license | none |
 | `registered_key` | `FL_CHARLES_REGISTERED_KEY` | License key for your Charles Proxy registration | none |
 | `ip_ranges` | `FL_CHARLES_IP_RANGES` | Per-developer IP ranges permitted to access the proxy | `[]` |
+| `debug` | `FL_CHARLES_DEBUG` | Enable debug-level logging for this Charles session | `false` |
+| `data_path` | `FL_CHARLES_DATA_PATH` | Charles application data directory to use (passes `--data`) | none |
+| `headless` | `FL_CHARLES_HEADLESS` | Launch Charles without a UI (passes `--headless`) | `false` |
+| `throttling` | `FL_CHARLES_THROTTLING` | Activate throttling for this Charles session (passes `--throttling`) | `false` |
 
 `registered_name` and `registered_key` are intentionally kept out of `charles.yml` since they're per-developer secrets, not shared team config — set them via env vars (or a `.env` file fastlane will load) instead of committing them. They must be provided together.
 
@@ -41,7 +45,23 @@ charles # Use default paths
 charles(app_path: "/path/to/Charles.app/Contents/MacOS/Charles")
 charles(config_path: "/path/to/charles.yml")
 charles(app_path: "/custom/path/to/Charles", config_path: "/custom/path/to/charles.yml")
+charles(debug: true)
+charles(data_path: "/tmp/charles-data")
+charles(headless: true)
+charles(throttling: true)
 ```
+
+### `charles_version`
+
+Query the installed Charles Proxy version (runs `--version` and returns the parsed version string, e.g. `"5.2"`). Useful for preflight checks before launching the proxy:
+
+```ruby
+charles_version
+version = charles_version
+UI.user_error!("Charles 5.x required") unless version.start_with?("5.")
+```
+
+Accepts the same `app_path` / `FL_CHARLES_APP_PATH` option as `charles`.
 
 ## Example
 
@@ -50,6 +70,8 @@ Check out the [example `Fastfile`](fastlane/Fastfile) to see how to use this plu
 [`example/charles.yml`](example/charles.yml) shows the simplified schema this plugin generates a Charles `.config` file from at runtime.
 
 `charles.yml` doesn't yet cover Charles's `toolConfiguration` tools (Breakpoints, Rewrite, Map Remote, Block List, etc.) — see [`docs/tool-configuration.md`](docs/tool-configuration.md) for the per-tool evaluation and why that's deferred to a future release.
+
+The Charles binary also exposes a broader CLI (`--headless`, `convert`, `filter`, `ssl`, …) beyond the `--config` launch path this plugin uses today — see [`docs/charles-cli.md`](docs/charles-cli.md) for a snapshot of that surface and an incremental support roadmap.
 
 ## Run tests for this plugin
 
