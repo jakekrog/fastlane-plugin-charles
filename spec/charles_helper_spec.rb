@@ -405,4 +405,31 @@ describe Fastlane::Helper::CharlesHelper do
       ])
     end
   end
+
+  describe '.build_version_command' do
+    it 'builds the --version argv' do
+      expect(described_class.build_version_command('/Charles')).to eq(['/Charles', '--version'])
+    end
+  end
+
+  describe '.parse_version_output' do
+    it 'extracts the version token from Charles output' do
+      expect(described_class.parse_version_output("Charles Proxy 5.2\n")).to eq('5.2')
+    end
+
+    it 'extracts the version when diagnostic lines precede it' do
+      output = <<~OUTPUT
+        SEVERE   com.charlesproxy.CharlesContext Error Accessing Application Data
+        Charles Proxy 5.2
+      OUTPUT
+
+      expect(described_class.parse_version_output(output)).to eq('5.2')
+    end
+
+    it 'raises a clear error when the output is unrecognizable' do
+      expect do
+        described_class.parse_version_output('unexpected output')
+      end.to raise_error(FastlaneCore::Interface::FastlaneError, /Unable to parse Charles version/)
+    end
+  end
 end

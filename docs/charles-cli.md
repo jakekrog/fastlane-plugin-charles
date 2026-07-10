@@ -132,7 +132,11 @@ Usage: ssl store
 ```
 
 Nothing else from this CLI surface is
-wired through yet (neither the fastlane action nor `charles-proxy-cli`).
+wired through yet (neither the `convert`/`filter`/`ssl` subcommands nor
+`charles-proxy-cli`).
+
+The `charles_version` action runs `--version` as a separate one-shot probe
+(not a launch flag on `charles`).
 
 ## Launch options
 
@@ -146,7 +150,7 @@ optionally opening session files).
 | `--debug` | **Supported** | Session-scoped debug logging. Exposed as the `debug` action option / `FL_CHARLES_DEBUG` env var. |
 | `--headless` | **Supported** | Launch without UI. Exposed as the `headless` action option / `FL_CHARLES_HEADLESS` env var — the primary fit for unattended lanes and CI. |
 | `--throttling` | **Supported** | Activates throttling for the session. Exposed as the `throttling` action option / `FL_CHARLES_THROTTLING` env var. Uses throttle settings already present in Charles's config or data directory — representing throttle presets in `charles.yml` remains deferred (see [`tool-configuration.md`](tool-configuration.md)). |
-| `--version` | Low priority | Version probe. Handy for diagnostics/support, not for the main `charles` lane. Could be a separate helper/action later. |
+| `--version` | **Supported** | Version probe via the `charles_version` action (not a `charles` launch flag). Returns the parsed version string (e.g. `"5.2"`) for preflight or compatibility checks. |
 | `[file]...` | Deferred | Positional session files to open on launch. Overlaps conceptually with post-run `convert`/`filter` workflows more than with "start a proxy from YAML." |
 
 ### Suggested incremental order (launch options)
@@ -154,7 +158,7 @@ optionally opening session files).
 1. ~~Plumb optional launch flags through the action (`headless`, then `debug`).~~ `--headless`, `--debug`, and `--data` are supported.
 2. ~~Add `--data` once there's a concrete isolation story (CI temp dir, etc.).~~ `--data` is supported via `data_path`; callers choose the directory (e.g. a CI temp dir).
 3. ~~Revisit `--throttling` only after throttle config can be expressed in YAML.~~ The launch flag is supported via `throttling`; YAML representation of throttle presets remains deferred.
-4. Treat `--version` / opening session files as separate, lower-priority surfaces.
+4. ~~Treat `--version` / opening session files as separate, lower-priority surfaces.~~ `--version` is supported via `charles_version`; opening session files on launch remains deferred.
 
 ## Commands
 

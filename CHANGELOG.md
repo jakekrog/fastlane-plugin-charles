@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `--headless` flag and launch the proxy without a UI.
 - `throttling` action option (`FL_CHARLES_THROTTLING`) to pass Charles's
   `--throttling` flag and activate throttling for the session.
+- `charles_version` action to run Charles with `--version` and return the
+  parsed version string for preflight or compatibility checks.
 
 ## [0.1.0] - 2026-06-30
 

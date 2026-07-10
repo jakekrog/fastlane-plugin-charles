@@ -14,6 +14,25 @@ module Fastlane
       ALL_IP_RANGES_ALIAS = 'all'.freeze
       ALL_IP_RANGES_CIDR = '0.0.0.0/0'.freeze
       CIDR_PATTERN = %r{\A(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})(?:/(\d{1,2}))?\z}
+      VERSION_LINE_PATTERN = /Charles Proxy\s+(\S+)/
+
+      # Builds the argv array for `charles --version`. Separate from launch
+      # commands — version is a one-shot probe, not a session flag.
+      def self.build_version_command(app_path)
+        [app_path, '--version']
+      end
+
+      # Parses the version token (e.g. "5.2") from Charles's --version output.
+      # Charles may also emit startup diagnostics on stderr that get merged
+      # into captured output depending on the runner.
+      def self.parse_version_output(output)
+        match = output.to_s.match(VERSION_LINE_PATTERN)
+        unless match
+          UI.user_error!("Unable to parse Charles version from output: #{output.to_s.strip.inspect}")
+        end
+
+        match[1]
+      end
 
       # Builds the argv array for launching Charles. Optional flags are
       # appended only when enabled so callers can splat straight into

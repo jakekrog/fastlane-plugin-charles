@@ -51,6 +51,18 @@ charles(headless: true)
 charles(throttling: true)
 ```
 
+### `charles_version`
+
+Query the installed Charles Proxy version (runs `--version` and returns the parsed version string, e.g. `"5.2"`). Useful for preflight checks before launching the proxy:
+
+```ruby
+charles_version
+version = charles_version
+UI.user_error!("Charles 5.x required") unless version.start_with?("5.")
+```
+
+Accepts the same `app_path` / `FL_CHARLES_APP_PATH` option as `charles`.
+
 ## Example
 
 Check out the [example `Fastfile`](fastlane/Fastfile) to see how to use this plugin. Try it by cloning the repo, running `fastlane install_plugins` and `bundle exec fastlane test`.
