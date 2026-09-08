@@ -9,9 +9,7 @@
 ## Requirements
 
 - Ruby **3.1+** (including **4.0**; tested in CI on 3.1–3.4 and 4.0)
-- [_fastlane_](https://github.com/fastlane/fastlane):
-  - **2.236.1+** on Ruby 3.x
-  - **2.238.0+** on Ruby 4.x ([Ruby 4 support](https://github.com/fastlane/fastlane/releases/tag/2.238.0) landed in 2.238.0)
+- [_fastlane_](https://github.com/fastlane/fastlane) **2.236.1+** on Ruby 3.x, **2.238.0+** on Ruby 4.x ([Ruby 4 support](https://github.com/fastlane/fastlane/releases/tag/2.238.0) landed in 2.238.0)
 - macOS with [Charles Proxy](https://www.charlesproxy.com/) installed (macOS only today)
 
 ## Getting Started
