@@ -6,6 +6,12 @@
 [![pre-commit](https://github.com/jakekrog/fastlane-plugin-charles/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/jakekrog/fastlane-plugin-charles/actions/workflows/pre-commit.yml)
 [![License: MIT](https://img.shields.io/github/license/jakekrog/fastlane-plugin-charles.svg)](LICENSE)
 
+## Requirements
+
+- Ruby **3.1+** (Ruby 3.0 is EOL and no longer supported by this plugin's fastlane dependency tree)
+- [_fastlane_](https://github.com/fastlane/fastlane) **2.236.1+**
+- macOS with [Charles Proxy](https://www.charlesproxy.com/) installed (macOS only today)
+
 ## Getting Started
 
 This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To get started with `fastlane-plugin-charles`, add it to your project by running:

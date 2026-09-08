@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
     'rubygems_mfa_required' => 'true',
     'source_code_uri'       => 'https://github.com/jakekrog/fastlane-plugin-charles'
   }
-  spec.required_ruby_version = '>= 3.0'
+  spec.required_ruby_version = '>= 3.1'
 
   # Don't add a dependency to fastlane or fastlane_re
   # since this would cause a circular dependency
