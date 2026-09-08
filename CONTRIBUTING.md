@@ -85,11 +85,24 @@ Code style is enforced by RuboCop (`bundle exec rubocop`, config in [`.rubocop.y
 
 ## Releasing (maintainers)
 
-Releases are published via [RubyGems Trusted Publishing](https://guides.rubygems.org/trusted-publishing/) — there's no API key stored anywhere, and no manual `gem push` from a local machine.
+Releases are published via [RubyGems Trusted Publishing](https://guides.rubygems.org/trusted-publishing/) — there's no API key stored anywhere, and no manual `gem push` from a local machine. There are three separate, non-triggering-each-other steps: merge the version bump, run the release workflow (this is the only step that actually publishes to RubyGems), and — entirely separately, whenever you get to it — create the GitHub Release. Nothing here happens automatically as a side effect of anything else.
 
-1. Bump the version in [`lib/fastlane/plugin/charles/version.rb`](lib/fastlane/plugin/charles/version.rb) and add a matching entry to [`CHANGELOG.md`](CHANGELOG.md).
-2. Merge that to the default branch.
-3. Manually run the [`Release` workflow](https://github.com/jakekrog/fastlane-plugin-charles/actions/workflows/release.yml) (`workflow_dispatch`, triggered from the Actions tab — this is deliberate, not automatic on every push). It runs `rake release`, which builds the gem, tags the commit `vX.Y.Z`, pushes the tag, and pushes to RubyGems.org via a short-lived, workflow-scoped OIDC token.
-4. Optionally, create a [GitHub Release](https://github.com/jakekrog/fastlane-plugin-charles/releases/new) pointing at the tag the workflow just pushed, with notes copied from the CHANGELOG entry — this is separate from and doesn't trigger the RubyGems publish, it's purely for GitHub-side visibility.
+1. **Bump the version and changelog, via a PR.** Bump [`lib/fastlane/plugin/charles/version.rb`](lib/fastlane/plugin/charles/version.rb) and add a matching entry to [`CHANGELOG.md`](CHANGELOG.md) (move the `[Unreleased]` items under a new `## [X.Y.Z] - YYYY-MM-DD` heading). `main` has a ruleset requiring PRs for everyone including the repo owner, so this has to go through a branch + PR + passing CI, same as any other change — there's no direct-push shortcut here anymore. Merge it (squash) once CI is green.
+
+2. **Trigger the `Release` workflow.** This is the only step that touches RubyGems, and it's the one deliberately-manual step in the whole process — it never runs automatically on a push, only on `workflow_dispatch`:
+
+   ```bash
+   gh workflow run release.yml --repo jakekrog/fastlane-plugin-charles --ref main
+   ```
+
+   (Or: Actions tab → "Release" → "Run workflow".) Either way, this pauses for approval per the `release` environment's required-reviewer gate — go approve the run in the Actions UI. Once approved, it runs `rake release`, which builds the gem, tags the merge commit `vX.Y.Z`, pushes that tag, and pushes to RubyGems.org via a short-lived, workflow-scoped OIDC token. The tag push isn't affected by the `main` ruleset — rulesets here target the branch, not tags — so this step needs no special handling despite the branch protection.
+
+3. **Create the GitHub Release, separately and whenever.** This step is purely cosmetic on GitHub's side — it doesn't touch RubyGems and isn't required for the gem to be usable, so there's no urgency or ordering constraint relative to step 2 beyond "the tag has to exist first," which it will once step 2 has run.
+
+   ```bash
+   gh release create vX.Y.Z --repo jakekrog/fastlane-plugin-charles --title vX.Y.Z --notes-file <(awk '/^## \[X\.Y\.Z\]/{flag=1; next} /^## \[/{flag=0} /^\[.*\]: /{flag=0} flag' CHANGELOG.md)
+   ```
+
+   Or just copy the relevant `[X.Y.Z]` section from `CHANGELOG.md` into the "Draft a new release" form at `https://github.com/jakekrog/fastlane-plugin-charles/releases/new`, picking the tag step 2 already pushed (don't create a new tag from this form). Any relative markdown links copied in from the changelog (e.g. `example/charles.yml`) won't resolve on the release page the way they do in the repo — turn those into absolute `https://github.com/jakekrog/fastlane-plugin-charles/blob/vX.Y.Z/...` links first.
 
 One-time setup (before the first release only): configure a [pending trusted publisher](https://guides.rubygems.org/trusted-publishing/adding-a-publisher/) on RubyGems.org for this repo + the `release.yml` workflow filename. Trusted publishing supports brand-new gems, so this can be done — and the whole release, including the very first one, can go through the workflow — without ever running `gem push` locally.
