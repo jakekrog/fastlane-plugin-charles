@@ -8,8 +8,8 @@
 
 ## Requirements
 
-- Ruby **3.1+** (Ruby 3.0 is EOL and no longer supported by this plugin's fastlane dependency tree)
-- [_fastlane_](https://github.com/fastlane/fastlane) **2.236.1+**
+- Ruby **3.1+** (including **4.0**; Ruby 3.0 is EOL and no longer supported by this plugin's fastlane dependency tree)
+- [_fastlane_](https://github.com/fastlane/fastlane) **2.238.0+** (Ruby 4 support landed in [2.238.0](https://github.com/fastlane/fastlane/releases/tag/2.238.0))
 - macOS with [Charles Proxy](https://www.charlesproxy.com/) installed (macOS only today)
 
 ## Getting Started
